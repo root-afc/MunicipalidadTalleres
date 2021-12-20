@@ -1,0 +1,141 @@
+.floating {
+  position: fixed;
+}
+
+.chip {
+  color: #51be78;
+  background-color: rgba(81, 190, 120, 0.1);
+}
+
+.center {
+  margin: auto;
+  width: 100%;
+  padding: 10px;
+}
+
+.center > form > div {
+  margin: auto;
+  width: 100%;
+  padding: 10px;
+}
+
+.center > form > div > mat-form-field {
+  width: 100%;
+}
+
+.pdr {
+  padding-right: 6rem;
+}
+
+body {
+  height: 100%;
+  background-color: snow;
+  overflow: auto;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+
+.centrarDiv {
+  display:flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  white-space: nowrap;
+  animation-name: fadeInDown;
+  animation-duration: 1s;
+  overflow: auto;
+}
+
+.mat-table {
+  overflow: auto;
+  width: 80%;
+}
+
+.mat-header-cell {
+  text-align: left;
+  color: darkslategray;
+  font-weight: bold;
+  margin: auto;
+  padding-right: 2rem;
+  white-space: normal;
+}
+
+.mat-cell {
+  text-align: left;
+  color: black;
+  margin: auto;
+  padding-right: 2rem;
+}
+
+@keyframes fadeInUp{
+  50% {
+    opacity: 1;
+    -webkit-transform: translateX(40px);
+  }
+
+
+}
+
+.fadeDrop {
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+}
+
+
+.buttons > div {
+  padding-right: 1rem;
+}
+
+.buttons {
+  display: flex;
+}
+
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+  color: white;
+
+}
+
+.example-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}
+
+
+/*body.swal2-height-auto {height: inherit!important;}*/

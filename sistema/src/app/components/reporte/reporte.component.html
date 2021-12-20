@@ -1,0 +1,602 @@
+<body>
+
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="example-toolbar">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1 class="example-app-name">Panel Administrador</h1>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="example-sidenav-container"
+                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <mat-nav-list>
+        <a mat-list-item (click)="Menu(2)" matTooltip="Permite ver los reportes.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">visibility</mat-icon>
+          <span>Ver reportes</span></a>
+        <a mat-list-item (click)="Menu(0)" matTooltip="Permite ver los cursos.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">visibility</mat-icon>
+          <span>Ver Cursos</span></a>
+        <a mat-list-item (click)="Menu(1)" matTooltip="Permite crear nuevos cursos.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">add</mat-icon>
+          <span>Crear Curso</span></a>
+        <a mat-list-item (click)="CloseSession()" matTooltip="Cerrará tu sesión.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">close</mat-icon>
+          <span>Cerrar sesión</span></a>
+
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+
+
+<ng-container>
+  <h2 class="text-center">INSCRITOS: {{ coutRowsInscritos }}</h2>
+  <br>
+  <div class="p-d-flex mb-5">
+    <button type="button" (click)="exportExcel()" class="p-button-success p-mr-2 p-button-export-excel">
+      <svg viewBox="0 0 512 512">
+        <path style="fill:#ECEFF1;" d="M496,432.011H272c-8.832,0-16-7.168-16-16s0-311.168,0-320s7.168-16,16-16h224
+	c8.832,0,16,7.168,16,16v320C512,424.843,504.832,432.011,496,432.011z"/>
+        <g>
+          <path style="fill:#388E3C;" d="M336,176.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,176.011,336,176.011z"/>
+          <path style="fill:#388E3C;" d="M336,240.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,240.011,336,240.011z"/>
+          <path style="fill:#388E3C;" d="M336,304.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,304.011,336,304.011z"/>
+          <path style="fill:#388E3C;" d="M336,368.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,368.011,336,368.011z"/>
+          <path style="fill:#388E3C;" d="M432,176.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,176.011,432,176.011z"/>
+          <path style="fill:#388E3C;" d="M432,240.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,240.011,432,240.011z"/>
+          <path style="fill:#388E3C;" d="M432,304.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,304.011,432,304.011z"/>
+          <path style="fill:#388E3C;" d="M432,368.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,368.011,432,368.011z"/>
+        </g>
+        <path style="fill:#2E7D32;" d="M282.208,19.691c-3.648-3.04-8.544-4.352-13.152-3.392l-256,48C5.472,65.707,0,72.299,0,80.011v352
+	c0,7.68,5.472,14.304,13.056,15.712l256,48c0.96,0.192,1.952,0.288,2.944,0.288c3.712,0,7.328-1.28,10.208-3.68
+	c3.68-3.04,5.792-7.584,5.792-12.32v-448C288,27.243,285.888,22.731,282.208,19.691z"/>
+        <path style="fill:#FAFAFA;" d="M220.032,309.483l-50.592-57.824l51.168-65.792c5.44-6.976,4.16-17.024-2.784-22.464
+	c-6.944-5.44-16.992-4.16-22.464,2.784l-47.392,60.928l-39.936-45.632c-5.856-6.72-15.968-7.328-22.56-1.504
+	c-6.656,5.824-7.328,15.936-1.504,22.56l44,50.304L83.36,310.187c-5.44,6.976-4.16,17.024,2.784,22.464
+	c2.944,2.272,6.432,3.36,9.856,3.36c4.768,0,9.472-2.112,12.64-6.176l40.8-52.48l46.528,53.152
+	c3.168,3.648,7.584,5.504,12.032,5.504c3.744,0,7.488-1.312,10.528-3.968C225.184,326.219,225.856,316.107,220.032,309.483z"/>
+
+      </svg>
+      <p>Exportar Tabla</p>
+    </button>
+
+    <button type="button" (click)="exportExcelInscritosPorSecciones()"
+            class="p-button-success p-mr-2 p-button-export-excel">
+      <svg viewBox="0 0 512 512">
+        <path style="fill:#ECEFF1;" d="M496,432.011H272c-8.832,0-16-7.168-16-16s0-311.168,0-320s7.168-16,16-16h224
+	c8.832,0,16,7.168,16,16v320C512,424.843,504.832,432.011,496,432.011z"/>
+        <g>
+          <path style="fill:#388E3C;" d="M336,176.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,176.011,336,176.011z"/>
+          <path style="fill:#388E3C;" d="M336,240.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,240.011,336,240.011z"/>
+          <path style="fill:#388E3C;" d="M336,304.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,304.011,336,304.011z"/>
+          <path style="fill:#388E3C;" d="M336,368.011h-64c-8.832,0-16-7.168-16-16s7.168-16,16-16h64c8.832,0,16,7.168,16,16
+		S344.832,368.011,336,368.011z"/>
+          <path style="fill:#388E3C;" d="M432,176.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,176.011,432,176.011z"/>
+          <path style="fill:#388E3C;" d="M432,240.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,240.011,432,240.011z"/>
+          <path style="fill:#388E3C;" d="M432,304.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,304.011,432,304.011z"/>
+          <path style="fill:#388E3C;" d="M432,368.011h-32c-8.832,0-16-7.168-16-16s7.168-16,16-16h32c8.832,0,16,7.168,16,16
+		S440.832,368.011,432,368.011z"/>
+        </g>
+        <path style="fill:#2E7D32;" d="M282.208,19.691c-3.648-3.04-8.544-4.352-13.152-3.392l-256,48C5.472,65.707,0,72.299,0,80.011v352
+	c0,7.68,5.472,14.304,13.056,15.712l256,48c0.96,0.192,1.952,0.288,2.944,0.288c3.712,0,7.328-1.28,10.208-3.68
+	c3.68-3.04,5.792-7.584,5.792-12.32v-448C288,27.243,285.888,22.731,282.208,19.691z"/>
+        <path style="fill:#FAFAFA;" d="M220.032,309.483l-50.592-57.824l51.168-65.792c5.44-6.976,4.16-17.024-2.784-22.464
+	c-6.944-5.44-16.992-4.16-22.464,2.784l-47.392,60.928l-39.936-45.632c-5.856-6.72-15.968-7.328-22.56-1.504
+	c-6.656,5.824-7.328,15.936-1.504,22.56l44,50.304L83.36,310.187c-5.44,6.976-4.16,17.024,2.784,22.464
+	c2.944,2.272,6.432,3.36,9.856,3.36c4.768,0,9.472-2.112,12.64-6.176l40.8-52.48l46.528,53.152
+	c3.168,3.648,7.584,5.504,12.032,5.504c3.744,0,7.488-1.312,10.528-3.968C225.184,326.219,225.856,316.107,220.032,309.483z"/>
+
+      </svg>
+      <p>Total de Inscritos</p>
+    </button>
+  </div>
+  <p-table #dt [columns]="cols" [value]="inscritos" [paginator]="false" [rows]="10" [style]="{'width':'2100px'}"
+           (onFilter)="onFilter($event, dt)">
+
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+
+        <th [style]="{'width':'210px'}">TALLER</th>
+        <th [style]="{'width':'170px'}">CATEGORÍA</th>
+        <th [style]="{'width':'170px'}">DÍA</th>
+        <th [style]="{'width':'180px'}">HORARIO</th>
+        <th [style]="{'width':'130px'}">DNI</th>
+        <th [style]="{'width':'210px'}">NOMBRE</th>
+        <th [style]="{'width':'150px'}">APE. PATERNO</th>
+        <th [style]="{'width':'150px'}">APE. MATERNO</th>
+        <th [style]="{'width':'130px'}">CELULAR</th>
+        <th [style]="{'width':'300px'}">CORREO</th>
+        <th [style]="{'width':'130px'}">NACIMIENTO</th>
+        <th [style]="{'width':'190px'}">DATOS DE REGISTRO</th>
+        <th [style]="{'width':'150px'}"></th>
+
+        <!--<th *ngFor="let col of columns">
+          {{col.header}}
+        </th>-->
+
+      </tr>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <ng-template *ngIf="col.field != 'e_id' && col.field != 'm_id'; then validar;"></ng-template>
+          <ng-template #validar>
+            <th>
+              <p-columnFilter type="text" [field]="col.field" [matchModeOptions]="matchModeOptions"
+                              [matchMode]="'contains'"></p-columnFilter>
+            </th>
+          </ng-template>
+
+        </ng-container>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <!--<tr [pSelectableRow]="rowData">
+        <td *ngFor="let col of columns">
+          <span *ngIf="col.field === 'e_fecha_nacimiento'">{{ rowData[col.field] | date:'dd/MM/yyyy' }}</span>
+          <span *ngIf="col.field === 'fecha'">{{ rowData[col.field] | date:'dd/MM/yyyy HH:mm' }}</span>
+          <span *ngIf="col.field != 'e_fecha_nacimiento' && col.field != 'fecha'">{{ rowData[col.field] }}</span>
+        </td>
+      </tr>-->
+      <tr>
+        <td>{{rowData.taller}}</td>
+        <td>{{rowData.edad}}</td>
+        <td>{{rowData.dia}}</td>
+        <td>{{rowData.hora}}</td>
+        <td>{{rowData.e_dni}}</td>
+        <td>{{rowData.e_nombre}}</td>
+        <td>{{rowData.e_ape_paterno}}</td>
+        <td>{{rowData.e_ape_materno}}</td>
+        <td>{{rowData.e_movil}}</td>
+        <td>{{rowData.e_correo}}</td>
+        <td>{{rowData.e_fecha_nacimiento | date:'dd/MM/yyyy'}}</td>
+        <td>{{rowData.fecha | date:'dd/MM/yyyy HH:mm'}}</td>
+        <td>
+          <button class="btn btn-primary mr-2" (click)="mostrarEstudiante(content, rowData.e_dni)"><span
+            class="la la-user input-icon"></span></button>
+          <a [routerLink]="['/pasarela/voucher/' + rowData.m_id + '/' + rowData.e_dni]" target="_blank"
+             class="btn btn-info"><span class="la la-envelope input-icon"></span></a>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br>
+  <h2 class="text-center">TOTAL DE INSCRITOS: {{ dt.totalRecords }}</h2>
+  <!--{{dt.totalRecords}}/{{dt.rows}}-->
+  <br>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Detalles del alumno</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="card-box-shared-body">
+        <div class="user-form">
+          <div class="contact-form-action">
+
+
+            <!--fgffffffffffff-->
+            <form [formGroup]="formEstudiante">
+
+
+              <div class="row">
+                <div class="col-md-12"><h4 class="mb-3">Datos del alumno</h4></div>
+
+
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                  <div class="input-box">
+                    <label class="label-text">DNI:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <div style="position: relative">
+                        <input class="form-control" type="text" formControlName="dni" maxlength="8" placeholder="DNI"
+                               [disabled]="true" [readonly]="true">
+                        <span class="la la-user input-icon"></span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                  <div class="input-box">
+                    <label class="label-text">Fecha de nacimiento:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="date" formControlName="fecha_nacimiento"
+                             placeholder="Fecha de nacimiento" [disabled]="true" [readonly]="true">
+                      <span class="la la-calendar input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Nombres:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="nombres" placeholder="Nombres"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-user input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Apellido paterno:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="ape_paterno" placeholder="Apellido paterno"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-user input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Apellido materno:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="ape_materno" placeholder="Apellido materno"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-user input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Sexo:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <div class="sort-ordering user-form-short">
+                        <select class="sort-ordering-select form-control" formControlName="sexo">
+                          <option value="Hombre" [selected]="true">Hombre</option>
+                          <option value="Mujer">Mujer</option>
+                          <option value="Otros">Otros</option>
+                        </select>
+                        <span class="la la-user input-icon"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Dirección de domicilio:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="direccion" placeholder="Dirección"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Distrito de domicilio:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <select class="form-control" formControlName="distrito_de_domicilio" [disabled]="true">
+                        <option *ngFor="let distrito of distritosDomicilio; let index = index" value="{{distrito.id}}"
+                                [selected]="index == 0">{{distrito.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Departamento (nacimiento):</label>
+                    <div class="form-group">
+                      <select class="form-control" #miDepartamento (change)="mostrarProvincias(miDepartamento.value)"
+                              formControlName="departamento" [disabled]="true">
+                        <option *ngFor="let departamento of departamentos; let index = index" value="{{departamento.id}}"
+                                [selected]="index == 0">{{departamento.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Provincia (nacimiento):</label>
+                    <div class="form-group">
+                      <select class="form-control" #miProvincia (change)="mostrarDistritos(miProvincia.value)"
+                              formControlName="provincia" [disabled]="true">
+                        <option *ngFor="let provincia of provincias; let index = index" value="{{provincia.id}}"
+                                [selected]="index == 0">{{provincia.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Distrito (nacimiento):</label>
+                    <div class="form-group">
+                      <select class="form-control" formControlName="distrito" [disabled]="true">
+                        <option *ngFor="let distrito of distritos; let index = index" value="{{distrito.id}}"
+                                [selected]="index == 0">{{distrito.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Número de teléfono fijo:</label>
+                    <div class="form-group">
+                      <input class="form-control" type="number" formControlName="telefono"
+                             placeholder="Número de teléfono fijo" [disabled]="true" [readonly]="true">
+                      <span class="la la-phone input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Número de móvil (celular):<span
+                      class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="number" formControlName="movil"
+                             placeholder="Número de móvil (celular) " [disabled]="true" [readonly]="true">
+                      <span class="la la-mobile-phone input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-12">
+                  <div class="input-box">
+                    <label class="label-text">Correo electrónico:<span class="primary-color-2 ml-1">*</span> </label>
+                    <span class="ml-1">(Para acceso al dictado de clases del alumno)</span>
+                    <div class="form-group">
+                      <input class="form-control" type="email" formControlName="correo" placeholder="Correo electrónico"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-envelope input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Tipo de seguro médico:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <div class="sort-ordering user-form-short">
+                        <select class="form-control" formControlName="seguro" [disabled]="true">
+                          <option *ngFor="let seguro of seguros;" value="{{seguro.id}}">{{seguro.nombre}}</option>
+                        </select>
+                        <span class="la la-file input-icon"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Tipo de grupo sanguíneo:</label>
+                    <div class="form-group">
+                      <select class="form-control" formControlName="sanguineo" [disabled]="true">
+                        <option *ngFor="let sanguineo of grupoSanguineos; let i = index;"
+                                value="{{sanguineo.id}}">{{sanguineo.nombre}}</option>
+                      </select>
+                      <span class="la la-file input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-12">
+                  <div class="input-box">
+                    <label class="label-text">Enfermedades y/o alergias que padece el estudiante:</label>
+                    <div class="form-group">
+                    <textarea class="form-control" rows="1" formControlName="enfermedades"
+                              placeholder="Enfermedades y/o alergias que padece el estudiante"></textarea>
+                      <span class="la la-file input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-12">
+                  <div class="input-box">
+                    <label class="label-text">Antibióticos y/o medicinas que deba ser suministrado en caso de
+                      emergencia:</label>
+                    <div class="form-group">
+                    <textarea class="form-control" rows="1" formControlName="medicinas"
+                              placeholder="Antibióticos y/o medicinas que deba ser suministrado en caso de emergencia"></textarea>
+                      <span class="la la-file input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+
+            <form [formGroup]="formApoderado">
+              <div class="row form-group-optional mt-3" [hidden]="isAdult">
+                <!-- APODERADO -->
+                <div class="col-md-12"><h4 class="mb-3">Datos del padre o apoderado</h4></div>
+
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                  <div class="input-box">
+                    <label class="label-text">DNI:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <div style="position: relative">
+                        <input class="form-control" type="text" formControlName="dni" placeholder="DNI" [disabled]="true"
+                               [readonly]="true">
+                        <span class="la la-user input-icon"></span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                  <div class="input-box">
+                    <label class="label-text">Fecha de nacimiento:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="date" formControlName="fecha_nacimiento"
+                             placeholder="Fecha de nacimiento" [disabled]="true" [readonly]="true">
+                      <span class="la la-calendar input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Nombres:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="nombres" placeholder="Nombres"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-user input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Apellido paterno:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="ape_paterno" placeholder="Apellido paterno"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-user input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Apellido materno:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="ape_materno" placeholder="Apellido materno"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-user input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Dirección de domicilio:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="direccion" placeholder="Dirección"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Distrito de domicilio:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <select class="form-control" formControlName="distrito_de_domicilio" [disabled]="true">
+                        <option *ngFor="let distrito of distritosDomicilio; let index = index" value="{{distrito.id}}"
+                                [selected]="index == 0">{{distrito.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Departamento (nacimiento):<span
+                      class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <select class="form-control" #miDepartamentoApo
+                              (change)="mostrarProvinciasApo(miDepartamentoApo.value)" formControlName="departamento"
+                              [disabled]="true">
+                        <option *ngFor="let departamento of departamentosApo; let index = index"
+                                value="{{departamento.id}}" [selected]="index == 0">{{departamento.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Provincia (nacimiento):<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <select class="form-control" #miProvinciaApo (change)="mostrarDistritosApo(miProvinciaApo.value)"
+                              formControlName="provincia" [disabled]="true">
+                        <option *ngFor="let provincia of provinciasApo; let index = index" value="{{provincia.id}}"
+                                [selected]="index == 0">{{provincia.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="input-box">
+                    <label class="label-text">Distrito (nacimiento):<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <select class="form-control" formControlName="distrito" [disabled]="true">
+                        <option *ngFor="let distrito of distritosApo; let index = index" value="{{distrito.id}}"
+                                [selected]="index == 0">{{distrito.nombre}}</option>
+                      </select>
+                      <span class="la la-map-marker input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Número de teléfono fijo:</label>
+                    <div class="form-group">
+                      <input class="form-control" type="number" formControlName="telefono"
+                             placeholder="Número de teléfono fijo" [disabled]="true" [readonly]="true">
+                      <span class="la la-phone input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="input-box">
+                    <label class="label-text">Número de móvil (celular):<span
+                      class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="text" formControlName="movil"
+                             placeholder="Número de móvil (celular) " [disabled]="true" [readonly]="true">
+                      <span class="la la-mobile-phone input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-12">
+                  <div class="input-box">
+                    <label class="label-text">Correo electrónico:<span class="primary-color-2 ml-1">*</span></label>
+                    <div class="form-group">
+                      <input class="form-control" type="email" formControlName="correo" placeholder="Correo electrónico"
+                             [disabled]="true" [readonly]="true">
+                      <span class="la la-envelope input-icon"></span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </form>
+            <!--fffffffffffff-->
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Cerrar</button>
+    </div>
+  </ng-template>
+</ng-container>
+
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+
+</body>

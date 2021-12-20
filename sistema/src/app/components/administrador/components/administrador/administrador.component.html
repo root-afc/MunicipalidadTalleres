@@ -1,0 +1,493 @@
+<body>
+
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="example-toolbar">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1 class="example-app-name">Panel Administrador</h1>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="example-sidenav-container"
+                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <mat-nav-list>
+        <a mat-list-item (click)="Menu(2)" matTooltip="Permite ver los reportes.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">visibility</mat-icon>
+          <span>Ver reportes</span></a>
+        <a mat-list-item (click)="Menu(0)" matTooltip="Permite ver los cursos.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">visibility</mat-icon>
+          <span>Ver Cursos</span></a>
+        <a mat-list-item (click)="Menu(1)" matTooltip="Permite crear nuevos cursos.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">add</mat-icon>
+          <span>Crear Curso</span></a>
+        <a mat-list-item (click)="CloseSession()" matTooltip="Cerrará tu sesión.">
+          <mat-icon style="padding-right: 1.7rem" color="accent">close</mat-icon>
+          <span>Cerrar sesión</span></a>
+
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+
+      <ng-container *ngIf="menuVer">
+        <h1 style="text-align: center; padding-top: 1rem"><b><u>Ver Cursos</u></b></h1>
+        <div class="d-flex justify-content-center pt-3 pb-3">
+          <mat-form-field appearance="fill" style="width: 250px">
+            <mat-label>Seleccionar categoría:</mat-label>
+            <mat-select [value]="categorias[0]" (selectionChange)="CategoriaSeleccionada($event)">
+              <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+                {{categoria.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <div class="d-flex justify-content-center">
+          <mat-form-field appearance="fill" style="width: 250px">
+            <mat-label>Buscar:</mat-label>
+            <input [formControl]="buscarForm" id="buscar" matInput (keyup)="applyFilter($event)"
+                   placeholder="Casa de la mujer" #input>
+          </mat-form-field>
+        </div>
+
+
+        <div class="centrarDiv">
+
+          <table mat-table [dataSource]="talleresFilter" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="nidSeccion">
+              <th mat-header-cell *matHeaderCellDef> Id</th>
+              <td mat-cell *matCellDef="let element"> {{element.nidSeccion}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="snombreTaller">
+              <th mat-header-cell *matHeaderCellDef> Nombre curso</th>
+              <td mat-cell *matCellDef="let element"> {{element.snombreTaller}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="snombreCategoria">
+              <th mat-header-cell *matHeaderCellDef> Categoría</th>
+              <td mat-cell *matCellDef="let element"> {{element.snombreCategoria}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="precio">
+              <th mat-header-cell *matHeaderCellDef> Precio</th>
+              <td mat-cell *matCellDef="let element"> S/. {{element.precio}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="minimo">
+              <th mat-header-cell *matHeaderCellDef> Mínimo de inscripciones</th>
+              <td mat-cell *matCellDef="let element"> {{element.minimo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="maximo">
+              <th mat-header-cell *matHeaderCellDef> Máximo de inscripciones</th>
+              <td mat-cell *matCellDef="let element"> {{element.maximo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="snombreEdades">
+              <th mat-header-cell *matHeaderCellDef> Rango de Edades</th>
+              <td mat-cell *matCellDef="let element"> {{element.snombreEdades}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="snombreHoras">
+              <th mat-header-cell *matHeaderCellDef> Rango Horario</th>
+              <td mat-cell *matCellDef="let element"> {{element.snombreHoras}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="snombreDias">
+              <th mat-header-cell *matHeaderCellDef> Días</th>
+              <td mat-cell *matCellDef="let element"> {{element.snombreDias}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="snombreLugares">
+              <th mat-header-cell *matHeaderCellDef> Lugar</th>
+              <td mat-cell *matCellDef="let element"> {{element.snombreLugares}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="inscritos">
+              <th mat-header-cell *matHeaderCellDef> Cantidad de inscritos</th>
+              <td mat-cell *matCellDef="let element"> {{element.inscritos}} </td>
+            </ng-container>
+<!--
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef> Fecha</th>
+              <td mat-cell *matCellDef="let element"> {{element.fecha | date: 'dd/MM/YYYY'}} </td>
+            </ng-container>-->
+
+            <ng-container matColumnDef="dfechaSeccionDesde">
+              <th mat-header-cell *matHeaderCellDef> Fecha Desde</th>
+              <td mat-cell *matCellDef="let element"> {{element.dfechaSeccionDesde | date: 'dd/MM/YYYY'}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="dfechaSeccionHasta">
+              <th mat-header-cell *matHeaderCellDef> Fecha Hasta</th>
+              <td mat-cell *matCellDef="let element"> {{element.dfechaSeccionHasta | date: 'dd/MM/YYYY'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="username">
+              <th mat-header-cell *matHeaderCellDef> Usuario Actualización</th>
+              <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dfchActualizacion">
+              <th mat-header-cell *matHeaderCellDef> Usuario Fecha Actualización</th>
+              <td mat-cell *matCellDef="let element"> {{element.dfchActualizacion | date: 'dd/MM/YYYY h:mm:ss'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <div class="buttons">
+                  <div>
+                    <button *ngIf="CheckDate(element.dfechaSeccionDesde)" (click)="EliminarTaller(element.nidSeccion)" matTooltip="Eliminar" mat-mini-fab
+                            color="primary"
+                            aria-label="Example icon button with a plus one icon">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                  <div>
+                    <button *ngIf="CheckDate(element.dfechaSeccionDesde)" (click)="ActualizarT(element.nidSeccion)" matTooltip="Actualizar" mat-mini-fab
+                            color="accent"
+                            aria-label="Example icon button with a plus one icon">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No hay datos que coincidan con el filtro: "{{input.value}}"</td>
+            </tr>
+          </table>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+        <div style="padding-bottom: 3rem">
+
+        </div>
+      </ng-container>
+
+
+      <div *ngIf="menuCrear" class="pb-4">
+        <h1 style="text-align: center; padding-top: 1rem"><b><u>Crear Curso</u></b></h1>
+        <mat-card class="pt-2 center col-md-6 col-12 fadeDrop" style="color: black">
+
+          <form id="taller" [formGroup]="fgTaller">
+
+            <div class="form-group">
+
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar taller:</mat-label>
+                <mat-select required formControlName="tallerid">
+                  <mat-option *ngFor="let taller of talleresLista" [value]="taller">
+                    {{taller.categoria.nombre}} - {{taller.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.tallerid.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese una descripción (opcional):</mat-label>
+                <textarea matInput formControlName="descripcion"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar rango de edad:</mat-label>
+                <mat-select required formControlName="edad">
+                  <mat-option *ngFor="let edad of edades" [value]="edad">
+                    {{edad.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.edad.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar temporada:</mat-label>
+                <mat-select required formControlName="temporada">
+                  <mat-option *ngFor="let temporada of temporadas" [value]="temporada">
+                    {{temporada.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.temporada.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Precio</mat-label>
+                <input required matInput type="number" formControlName="precio" class="example-right-align">
+                <span matSuffix>S/.</span>
+                <mat-error *ngIf="fgTaller.controls.precio.hasError('required')">Requerido.</mat-error>
+                <mat-error *ngIf="fgTaller.controls.precio.hasError('min')">Debe ser un número mayor o igual a 30.
+                </mat-error>
+                <mat-error *ngIf="fgTaller.controls.precio.hasError('max')">Debe ser un número menor o igual a 500.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar hora:</mat-label>
+                <mat-select required formControlName="hora">
+                  <mat-option *ngFor="let hora of horas" [value]="hora">
+                    {{hora.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.hora.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar día:</mat-label>
+                <mat-select required formControlName="dia">
+                  <mat-option *ngFor="let dia of dias" [value]="dia">
+                    {{dia.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.dia.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar lugar:</mat-label>
+                <mat-select required formControlName="lugar">
+                  <mat-option *ngFor="let lugar of lugares" [value]="lugar">
+                    {{lugar.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.lugar.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese el rango de fecha disponible:</mat-label>
+                <mat-date-range-input [min]="minDate" [rangePicker]="picker">
+                  <input required readonly formControlName="fchInicio" matStartDate placeholder="Start date">
+                  <input required readonly formControlName="fchFin" matEndDate placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-error *ngIf="fgTaller.controls.fchInicio.hasError('required')">Requerido fecha de inicio.
+                </mat-error>
+                <mat-error *ngIf="fgTaller.controls.fchFin.hasError('required')">Requerido fecha de fin.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese la cantidad mínima de alumnos:</mat-label>
+                <input type="number" formControlName="minima" required matInput>
+                <mat-error *ngIf="fgTaller.controls.minima.hasError('required')">Requerido.</mat-error>
+                <mat-error *ngIf="fgTaller.controls.minima.hasError('min')">Debe ingresar un número mayor o igual a 8.
+                </mat-error>
+                <mat-error *ngIf="fgTaller.controls.minima.hasError('max')">El número no puede ser mayor a 30.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group" style="display: none">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese la cantidad máxima de alumnos:</mat-label>
+                <input type="number" formControlName="maxima" required matInput>
+                <mat-error *ngIf="fgTaller.controls.maxima.hasError('required')">Requerido.</mat-error>
+                <mat-error *ngIf="fgTaller.controls.maxima.hasError('min')">Debe ingresar un número mayor o igual a 8.
+                </mat-error>
+                <mat-error *ngIf="fgTaller.controls.maxima.hasError('max')">El número no puede ser mayor a 30.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group col-md-4 col-8">
+              <button mat-raised-button class="container-fluid" color="accent" (click)="insertTaller()">CREAR</button>
+            </div>
+          </form>
+
+        </mat-card>
+      </div>
+
+      <div *ngIf="menuActualizar" class="pb-4">
+        <h1 style="text-align: center; padding-top: 1rem"><b><u>Actualizar Curso</u></b></h1>
+        <mat-card class="pt-2 center col-md-6 col-12 fadeDrop" style="color: black">
+
+          <form id="tallerActualizar" [formGroup]="fgTallerActualizar">
+
+            <div class="form-group">
+
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar taller:</mat-label>
+                <mat-select required formControlName="tallerid">
+                  <mat-option *ngFor="let taller of talleresLista" [value]="taller">
+                    {{taller.categoria.nombre}} - {{taller.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTaller.controls.tallerid.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese una descripción (opcional):</mat-label>
+                <textarea matInput formControlName="descripcion"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar rango de edad:</mat-label>
+                <mat-select required formControlName="edad">
+                  <mat-option *ngFor="let edad of edades" [value]="edad">
+                    {{edad.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTallerActualizar.controls.edad.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar temporada:</mat-label>
+                <mat-select required formControlName="temporada">
+                  <mat-option *ngFor="let temporada of temporadas" [value]="temporada">
+                    {{temporada.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTallerActualizar.controls.temporada.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Precio</mat-label>
+                <input required matInput type="number" formControlName="precio" class="example-right-align">
+                <span matSuffix>S/.</span>
+                <mat-error *ngIf="fgTallerActualizar.controls.precio.hasError('required')">Requerido.</mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.precio.hasError('min')">Debe ser un número mayor o igual a
+                  30.
+                </mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.precio.hasError('max')">Debe ser un número menor o igual a
+                  500.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar hora:</mat-label>
+                <mat-select required formControlName="hora">
+                  <mat-option *ngFor="let hora of horas" [value]="hora">
+                    {{hora.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTallerActualizar.controls.hora.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar día:</mat-label>
+                <mat-select required formControlName="dia">
+                  <mat-option *ngFor="let dia of dias" [value]="dia">
+                    {{dia.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTallerActualizar.controls.dia.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar lugar:</mat-label>
+                <mat-select required formControlName="lugar">
+                  <mat-option *ngFor="let lugar of lugares" [value]="lugar">
+                    {{lugar.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="fgTallerActualizar.controls.lugar.hasError('required')">Requerido.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese el rango de fecha disponible:</mat-label>
+                <mat-date-range-input [min]="minDate" [rangePicker]="picker">
+                  <input required readonly formControlName="fchInicio" matStartDate placeholder="Start date">
+                  <input required readonly formControlName="fchFin" matEndDate placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-error *ngIf="fgTallerActualizar.controls.fchInicio.hasError('required')">Requerido fecha de
+                  inicio.
+                </mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.fchFin.hasError('required')">Requerido fecha de fin.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese la cantidad mínima de alumnos:</mat-label>
+                <input type="number" formControlName="minima" required matInput>
+                <mat-error *ngIf="fgTallerActualizar.controls.minima.hasError('required')">Requerido.</mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.minima.hasError('min')">Debe ingresar un número mayor o
+                  igual a 8.
+                </mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.minima.hasError('max')">El número no puede ser mayor a 30.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group" style="display: none">
+              <mat-form-field appearance="fill">
+                <mat-label>Ingrese la cantidad máxima de alumnos:</mat-label>
+                <input type="number" formControlName="maxima" required matInput>
+                <mat-error *ngIf="fgTallerActualizar.controls.maxima.hasError('required')">Requerido.</mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.maxima.hasError('min')">Debe ingresar un número mayor o
+                  igual a 8.
+                </mat-error>
+                <mat-error *ngIf="fgTallerActualizar.controls.maxima.hasError('max')">El número no puede ser mayor a 30.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group col-md-4 col-8">
+              <button mat-raised-button class="container-fluid" color="accent" (click)="ActualizarSeccion()">ACTUALIZAR
+              </button>
+            </div>
+          </form>
+
+        </mat-card>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+</body>
+
+

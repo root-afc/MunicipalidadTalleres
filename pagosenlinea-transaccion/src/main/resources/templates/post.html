@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>body {background: rgba(0, 0, 0, 0.8);}</style>
+    <script th:inline="javascript">
+        window.parent.postMessage({
+                'type': 'iframeData',
+                'message': [[${json}]]
+        }, "*");
+    </script>
+</head>
+<body>
+</body>
+</html>

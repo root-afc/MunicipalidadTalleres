@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script th:src="@{~/pagosenlinea-transaccion/jsc/script.js}"></script>
+    <style>body {background: rgba(0, 0, 0, 0.8);}</style>
+    <script>
+        var config = {
+            "merchantId": "[[${merchantId}]]",
+            "moneda": "[[${moneda}]]",
+            "nombre": "[[${nombre}]]",
+            "apellido": "[[${apellido}]]",
+            "importe": "[[${importe}]]",
+            "email": "[[${email}]]",
+            "sesion": "[[${sesion}]]",
+            "purchasenumber": "[[${purchasenumber}]]",
+            "urltimeout": "[[${urltimeout}]]",
+            "urlpost": "[[${urlpost}]]?purchasenumber=[[${purchasenumber}]]",
+            "urlLibJs": "[[${urlLibJs}]]",
+        }
+    </script>
+</head>
+<body>
+<div id="btn_pago"  style="display:none"></div>
+<script>pagar();</script>
+</body>
+</html>
